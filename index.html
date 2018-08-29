@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>TOQEN - Send Transfer</title>
+
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" type="text/css" href="../../deps/toastr/toastr.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+
+	<script type="text/javascript" src="../../deps/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../../deps/toastr/toastr.min.js"></script>
+	<script type="text/javascript" src="../../deps/qlite.js/qlite.js"></script>
+    <script type="text/javascript" src="../../deps/identicon.js/pnglib.js"></script>
+    <script type="text/javascript" src="../../deps/identicon.js/identicon.js"></script>
+    <script type="text/javascript" src="../../deps/md5/md5.min.js"></script>
+    <script type="text/javascript" src="js/qlite_error_wrap.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="UTF-8"> 
+</head>
+<body>
+
+<header>
+    <div id="logo"></div>
+    <div id="account"></div>
+</header>
+
+<div id="loading_screen">
+    <img class="loading" src="imgs/loading.png" />
+</div>
+
+<div id="intro_screen" class="hidden"><div id="intro_screen_window">
+    <p><b>TOQEN</b> is currently in a proof-of-concept phase and has to be treated accordingly. Consider it a testing platform (testnet) for now and do not use it for anything serious.
+    Do not give it any value, as it is not yet secured against attacks.</p>
+    <input type="button" value="okay" onclick="hide_intro();" />
+</div></div>
+
+<div class="page" id="account_page">
+    <h1>Pick your Account</h1>
+    <p>These are all IAM accounts we could find on your ql-node. Make sure they are not used for anything else if you intend to use them as toqen accounts.</p>
+
+    <input type="button" value="create new" onclick="create_account();" id="button_create_account" />
+    <h2>Your Accounts</h2>
+    <div id="iams"></div>
+
+</div>
+
+<div class="page hidden" id="account_index_page">
+
+    <h2>Pick your Account Index</h2>
+    <p>Your account index is a non-negative integer acting as one-time address that can receive funds from up to five inputs and spend them once by sending up to five outputs. Toqens are sent from indexes to indexes of the involved accounts. You can find all your indexes with available funds on the <a target="_blank" id="explorer_link_without_index">toqen explorer</a>.</p>
+    <input type="number" placeholder="account index" id="account_index" />
+    <input type="button" value="select" onclick="select_account_index(parseInt($('#account_index').val()))" /><br/>
+</div>
+
+<div class="page hidden" id="transfer_page">
+
+    <h2>Inputs</h2>
+    <p>You can find your inputs on the <a target="_blank" id="explorer_link">toqen explorer</a>.</p>
+    <input type="number" placeholder="epoch" id="input_epoch" />
+    <input type="button" value="add" id="button_add_input" onclick="add_input($('#input_epoch').val());" />
+
+    <table id="input_table">
+        <tr>
+            <th>epoch</th>
+            <th>value</th>
+            <th></th>
+        </tr>
+    </table>
+
+    <p>total balance: <label id="total_input_value">0</label></p>
+
+    <h2>Outputs</h2>
+    <input type="text" placeholder="receiver address" id="output_address" />
+    <input type="number" placeholder="receiver index" id="output_index" />
+    <input type="number" placeholder="value" id="output_value" />
+    <input type="button" value="add" onclick="add_output($('#output_address').val(), $('#output_index').val(), $('#output_value').val());" />
+
+    <table id="output_table">
+        <tr>
+            <th>address</th>
+            <th>index</th>
+            <th>value</th>
+            <th></th>
+        </tr>
+    </table>
+
+    <p>total sent: <label id="total_output_value">0</label></p>
+
+    <h2>Send Transfer</h2>
+    <p>Before sending make absolutely sure that everything is correct. It is not idiot-proof yet and you only have one shot to get it right. If you send an incorrect transfer, you will be unable to regain access to your funds.</p>
+    <input type="button" value="send" id="send_transfer_button" onclick="send_transfer();" />
+</div>
+
+<!-- fill with content ... -->
+<script type="text/javascript" src="js/main.js"></script>
+</body>
+</html>
